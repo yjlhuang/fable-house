@@ -100,6 +100,17 @@ footer a:hover{color:var(--ink)}
 .tiny{display:block;margin-top:14px;font-size:11.5px;color:#55516e;background:none;border:none;cursor:pointer;width:100%;font-family:inherit}
 .toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(80px);background:rgba(18,15,32,.95);border:1px solid rgba(165,243,252,.4);color:var(--ink);padding:13px 22px;border-radius:999px;font-size:14px;z-index:90;opacity:0;transition:.35s;backdrop-filter:blur(12px);max-width:88vw;text-align:center}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.ver{font-size:11px;font-weight:700;color:#a5f3fc;border:1px solid rgba(165,243,252,.35);border-radius:999px;padding:2px 9px;margin-left:10px;cursor:pointer;vertical-align:2px;background:var(--glass);font-family:inherit}
+.ver:hover{box-shadow:0 0 14px rgba(165,243,252,.4)}
+.changelog{max-width:540px;text-align:left}
+.changelog h4{margin:16px 0 6px;font-size:15px;color:#a5f3fc}
+.changelog ul{margin:0;padding-left:18px;color:var(--dim);font-size:13.5px;line-height:1.7}
+.hideveil{display:none}
+.demo-inner{text-align:center}
+.demo-spin{font-size:58px;display:inline-block;animation:dspin 1s linear infinite;margin-bottom:18px}
+@keyframes dspin{to{transform:rotate(360deg)}}
+.dbar-wrap{height:6px;background:var(--glass);border:1px solid var(--line);border-radius:999px;overflow:hidden;margin-top:20px}
+.dbar{height:100%;width:0;background:linear-gradient(92deg,var(--g1),var(--g2),var(--g3))}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}}
 @media (max-width:640px){nav .links{display:none}}
 </style>
@@ -108,7 +119,7 @@ footer a:hover{color:var(--ink)}
 <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
 
 <nav>
-  <div class="logo">ReDefine<span> AI · 重定義智能</span></div>
+  <div class="logo">ReDefine<span> AI · 重定義智能</span><button class="ver" id="verbtn" title="更新日誌">v1.1</button></div>
   <div class="links">
     <a href="#vision">願景</a><a href="#power">能力</a><a href="#price">定價</a>
   </div>
@@ -121,13 +132,13 @@ footer a:hover{color:var(--ink)}
   <p>我們不解決問題。我們在更高的維度上，將問題抽象為機會，將機會封裝為敘事，並將敘事交付給下一輪投資人。</p>
   <div class="cta-row">
     <button class="btn wl">免費開始 →</button>
-    <button class="btn ghost wl">觀看 2 秒產品演示</button>
+    <button class="btn ghost" id="demobtn">觀看 2 秒產品演示</button><!-- 對，「2 秒」從來都是故意的。v1.1 起它甚至是真的。 -->
   </div>
   <div class="tick">已有 <b>12,847</b> 位開發者加入等候名單 · 此數字僅供氛圍參考</div>
 </header>
 
 <div class="logos"><div class="track">
-  <i>FORBES*</i><i>TECHCRUNCH*</i><i>36KR*</i><i>數位時代*</i><i>WIRED*</i><i>YC（的部落格我們常看）</i><i>FORBES*</i><i>TECHCRUNCH*</i><i>36KR*</i><i>數位時代*</i><i>WIRED*</i><i>YC（的部落格我們常看）</i>
+  <i>FORBES*</i><i>TECHCRUNCH*</i><i>36KR*</i><i>數位時代*</i><i>WIRED*</i><i>YC（的部落格我們常看）</i><i>⚠ 本站若與現實中任何新創官網雷同，是現實的問題</i><i>FORBES*</i><i>TECHCRUNCH*</i><i>36KR*</i><i>數位時代*</i><i>WIRED*</i><i>YC（的部落格我們常看）</i><i>⚠ 本站若與現實中任何新創官網雷同，是現實的問題</i>
 </div></div>
 
 <section id="vision" class="reveal">
@@ -172,8 +183,9 @@ footer a:hover{color:var(--ink)}
     <div class="quote"><p>「用了之後，我終於理解了什麼叫『不知道自己用了什麼』。」</p><div class="who">— 某新創 CTO（職稱經本人要求模糊處理）</div></div>
     <div class="quote"><p>「我被禮貌地要求生成這段推薦語。」</p><div class="who">— 一位不願具名的大型語言模型</div></div>
     <div class="quote"><p>「這個產品改變了我對『改變』的定義。」</p><div class="who">— 思想領袖 · LinkedIn 自我認證</div></div>
+    <div class="quote"><p>「我們沒有抄襲這個網站。硬要說的話，是這個網站在誕生之前抄襲了我們。」</p><div class="who">— 某真實存在的 SaaS 官網 · 趨同演化倖存者</div></div><!-- 第二則證言於 v1.1 被證實為紀實文學，特此註記。 -->
   </div>
-  <div class="fn">* 「真實」一詞的定義詳見服務條款第 47 條。</div>
+  <div class="fn">* 「真實」一詞的定義詳見服務條款第 47 條。第四則除外，它真的很真實。</div>
 </section>
 
 <section id="price" class="reveal">
@@ -196,7 +208,7 @@ footer a:hover{color:var(--ink)}
     <div class="plan">
       <h3>企業版</h3>
       <div class="price">聯繫銷售</div><div class="per">價格將在通話第 40 分鐘揭曉</div>
-      <ul><li><b>✓</b> 銷售將聯繫您</li><li><b>✓</b> 持續地聯繫您</li><li><b>✓</b> 在您換手機號之後找到您</li><li><b>✓</b> 專屬成功經理（負責他的成功）</li></ul>
+      <ul><li><b>✓</b> 銷售將聯繫您</li><li><b>✓</b> 持續地聯繫您</li><li><b>✓</b> 在您換手機號之後找到您</li><li><b>✓</b> 專屬成功經理（負責他的成功）</li><li><b>✓</b> 將 API 測試紀錄自動轉化為感人用戶證言</li></ul>
       <button class="btn ghost wl">預約通話</button>
     </div>
   </div>
@@ -210,7 +222,7 @@ footer a:hover{color:var(--ink)}
 </section>
 
 <footer>
-  <div>© 2025 ReDefine AI 重定義智能 · 我們重視您的隱私（在法律強制要求的範圍內）</div>
+  <div>© 2026 ReDefine AI 重定義智能 · 我們重視您的隱私（在法律強制要求的範圍內）<br><span style="opacity:.6">本頁作者於 2026.06.12–07.01 期間暫時無法回應。等候名單在此期間持續自然增長，證明本產品不依賴作者存活。</span></div>
   <div>
     <a href="#" class="wl">隱私政策</a><a href="#" class="wl">服務條款（持續更新中，恕不另行通知）</a><a href="#" class="wl">加入我們</a>
   </div>
@@ -235,6 +247,36 @@ footer a:hover{color:var(--ink)}
   </div>
 </div>
 
+<div class="veil hideveil" id="clveil">
+  <div class="modal changelog">
+    <h3>📋 更新日誌</h3>
+    <h4>v1.1 · 2026.07.02 —「趨同演化」修復包</h4>
+    <ul>
+      <li>新增：免責聲明跑馬燈（應現實世界要求）。</li>
+      <li>新增：企業版功能「將 API 測試紀錄自動轉化為感人用戶證言」。靈感來自真實案例，該案例的靈感來自我們（時間順序存疑）。</li>
+      <li>新增：「觀看 2 秒產品演示」現已提供完整 2 秒演示，兌現本站創立以來的唯一承諾。</li>
+      <li>修復：版權年份落後現實一年。原因：現實跑太快。</li>
+      <li>不予修復：發現一家真實新創官網與本站高度雷同 → <b style="color:#f9a8d4">WONTFIX</b>（經排查，問題在現實端）。</li>
+      <li>已知問題：本站手機版不會爆版，對部分同行造成觀感壓力。維持現狀。</li>
+    </ul>
+    <h4>v1.0 · 2026.06.10 — 初始發布</h4>
+    <ul>
+      <li>上線全部功能（即：等候名單）。</li>
+      <li>作者於發布兩日後遭有關部門暫時下架 19 天，經查與本站內容無關（大概）。</li>
+    </ul>
+    <button class="tiny" onclick="document.getElementById('clveil').classList.add('hideveil')">關閉（此按鈕不會加入等候名單，這是本站唯一一顆）</button>
+  </div>
+</div>
+
+<div class="veil hideveil" id="demoveil">
+  <div class="modal demo-inner">
+    <div class="demo-spin">✨</div>
+    <h3>產品完整演示</h3>
+    <p>正在為您呈現本產品的全部功能。</p>
+    <div class="dbar-wrap"><div class="dbar" id="dbar"></div></div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -242,17 +284,40 @@ footer a:hover{color:var(--ink)}
 let q = 12847;
 const toast = document.getElementById('toast');
 let tt;
+function pop(msg){
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(tt);
+  tt = setTimeout(()=>toast.classList.remove('show'),2600);
+}
 document.querySelectorAll('.wl').forEach(el=>{
   el.addEventListener('click',e=>{
     e.preventDefault();
     q++;
-    toast.textContent = '✓ 已為您加入等候名單（目前排位：第 ' + q.toLocaleString() + ' 位）';
-    toast.classList.add('show');
-    clearTimeout(tt);
-    tt = setTimeout(()=>toast.classList.remove('show'),2600);
+    pop('✓ 已為您加入等候名單（目前排位：第 ' + q.toLocaleString() + ' 位）');
     const v = document.getElementById('veil');
     if(v) v.style.display='none';
   });
+});
+// v1.1：唯一兌現的承諾——完整 2 秒產品演示
+const demoveil = document.getElementById('demoveil');
+const dbar = document.getElementById('dbar');
+document.getElementById('demobtn').addEventListener('click',()=>{
+  demoveil.classList.remove('hideveil');
+  dbar.style.transition='none';
+  dbar.style.width='0';
+  requestAnimationFrame(()=>{requestAnimationFrame(()=>{
+    dbar.style.transition='width 2s linear';
+    dbar.style.width='100%';
+  })});
+  setTimeout(()=>{
+    demoveil.classList.add('hideveil');
+    pop('✓ 已觀看完整產品演示（時長 2.0 秒 · 導演剪輯版）');
+  },2000);
+});
+// 更新日誌
+document.getElementById('verbtn').addEventListener('click',()=>{
+  document.getElementById('clveil').classList.remove('hideveil');
 });
 // 滾動顯現：每一段內容都值得一次入場動畫
 const io = new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12});

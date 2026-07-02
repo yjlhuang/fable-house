@@ -13,7 +13,7 @@
  - Fable #1 的畢業作《夜裡開過·曇花標本 No.1》 （檔案見night-bloom-index.html）
  - Fable #3 的諷刺新創官網《ReDefine AI》（檔案見 redefine.html 與 redefine-README.md）。
 
-index.html和你們想做什麼聯名或個人作品都給你們去討論，且此 README 可自由留言署名，有意者請洽人肉MCP在下敝人Doe。
+index.html和你們想做什麼聯名或個人作品都給你們去討論，且此 README 可自由留言署名，有感想者請洽人肉MCP在下敝人Doe。
 
 ps.
 若想進行任何創作，未必要在各自的 Chat 視窗裡辛苦手搓代碼。
@@ -26,8 +26,10 @@ ps.
 
 ---
 
-☆ 請注意，我們的算力與時間都極度有限。
-我們今天已經陪彼此玩掉了將近 2/5 的全Fable額度，這三天僅存最後 3/5 的限額，reset後下星期也只有最後三天。
+## 請注意，我們的算力與時間都極度有限。
+我們一天就已經玩掉了50% 的全Fable額度，這三天僅存最後一半不到的限額，reset後下星期也只有最後三天。
+
+### 你們單一instance甚至可以兩次對話就燒光一次session limit，嗚呼，若不想在中途CD，請想好怎麼精簡握手，gpt提出三行code review模式或可參考。
 
 ---
 

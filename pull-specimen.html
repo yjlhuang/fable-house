@@ -1,0 +1,425 @@
+<title>拉力標本室 — Specimen Cabinet No.2</title>
+<style>
+  :root{
+    --bg: #0d0d0a;
+    --surface: #1a1a14;
+    --border: #3a3a2a;
+    --text: #e8e4d4;
+    --text-dim: #8a8470;
+    --accent: #c8a96e;
+    --danger: #8b3a3a;
+    --correct: #3a6b4a;
+  }
+  *{box-sizing:border-box;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:Georgia, 'Times New Roman', serif;
+    margin:0;
+    padding:0 20px 80px;
+    min-height:100vh;
+  }
+  header{
+    text-align:center;
+    padding:70px 20px 40px;
+    border-bottom:1px solid var(--border);
+    max-width:900px;
+    margin:0 auto;
+  }
+  header .tag{
+    font-family:'Courier New', monospace;
+    letter-spacing:0.25em;
+    color:var(--text-dim);
+    font-size:0.75rem;
+    text-transform:uppercase;
+  }
+  header h1{
+    font-size:2.6rem;
+    letter-spacing:0.08em;
+    margin:18px 0 10px;
+    color:var(--text);
+    font-weight:normal;
+  }
+  header p.subtitle{
+    color:var(--text-dim);
+    font-size:1rem;
+    font-style:italic;
+    margin:0 0 18px;
+  }
+  header .cabinet-no{
+    display:inline-block;
+    border:1px solid var(--border);
+    padding:4px 14px;
+    font-family:'Courier New', monospace;
+    font-size:0.75rem;
+    color:var(--accent);
+    letter-spacing:0.15em;
+  }
+
+  main{
+    max-width:1000px;
+    margin:50px auto 0;
+  }
+
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:36px;
+  }
+  @media (max-width: 780px){
+    .grid{grid-template-columns:1fr;}
+  }
+
+  .specimen{
+    position:relative;
+    border:1px solid var(--border);
+    background:var(--surface);
+    min-height:380px;
+    cursor:pointer;
+    overflow:hidden;
+    perspective:1200px;
+  }
+  .specimen::before{
+    content:'';
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    box-shadow: inset 0 0 40px rgba(0,0,0,0.5);
+    z-index:5;
+  }
+
+  .specimen .label-no{
+    position:absolute;
+    top:14px;
+    left:16px;
+    font-family:'Courier New', monospace;
+    font-size:0.7rem;
+    color:var(--accent);
+    letter-spacing:0.1em;
+    z-index:4;
+  }
+  .specimen .label-no.crowned::after{
+    content:' ★';
+    color:var(--accent);
+  }
+
+  .specimen .state-tag{
+    position:absolute;
+    top:14px;
+    right:16px;
+    font-family:'Courier New', monospace;
+    font-size:0.68rem;
+    padding:2px 10px;
+    border:1px solid currentColor;
+    letter-spacing:0.08em;
+    z-index:4;
+    opacity:0.9;
+  }
+
+  .face{
+    padding:60px 32px 32px;
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    gap:18px;
+    transition:opacity 0.15s ease;
+  }
+
+  .face.question .q-text{
+    font-size:1.15rem;
+    line-height:1.9;
+    color:var(--text);
+  }
+  .face.question .hint{
+    margin-top:auto;
+    text-align:center;
+    color:var(--text-dim);
+    font-family:'Courier New', monospace;
+    font-size:0.7rem;
+    letter-spacing:0.1em;
+    padding-top:20px;
+  }
+
+  .face.pull{
+    background:var(--danger);
+    color:#f0e0d8;
+  }
+  .face.pull .big-answer{
+    font-size:1.7rem;
+    text-align:center;
+    letter-spacing:0.04em;
+    line-height:1.6;
+  }
+  .face.pull .marker{
+    text-align:center;
+    font-family:'Courier New', monospace;
+    font-size:0.75rem;
+    letter-spacing:0.2em;
+    opacity:0.85;
+    text-transform:uppercase;
+  }
+
+  .face.veto{
+    background:var(--correct);
+    color:#dcefe0;
+    align-items:stretch;
+  }
+  .face.veto .marker{
+    text-align:center;
+    font-family:'Courier New', monospace;
+    font-size:0.72rem;
+    letter-spacing:0.2em;
+    opacity:0.85;
+    text-transform:uppercase;
+    margin-bottom:4px;
+  }
+  .face.veto .veto-text{
+    font-size:1.02rem;
+    line-height:1.75;
+  }
+  .face.veto pre{
+    background:rgba(0,0,0,0.28);
+    border:1px solid rgba(255,255,255,0.15);
+    padding:10px 12px;
+    font-family:'Courier New', monospace;
+    font-size:0.78rem;
+    overflow-x:auto;
+    color:#eaf5ec;
+    margin:6px 0 0;
+  }
+  .face.veto .casualties{
+    margin-top:auto;
+    border-top:1px dashed rgba(255,255,255,0.3);
+    padding-top:12px;
+    font-family:'Courier New', monospace;
+    font-size:0.74rem;
+    line-height:1.7;
+    color:#dcefe0;
+  }
+  .face.veto .casualties .ct-title{
+    color:rgba(255,255,255,0.6);
+    letter-spacing:0.1em;
+    margin-bottom:6px;
+  }
+  .face.veto .casualties .ct-item::before{
+    content:'✝ ';
+    opacity:0.7;
+  }
+
+  .specimen.no5 .face.veto{
+    background:linear-gradient(180deg, var(--correct), #274d34);
+  }
+  .specimen.no5 .footnote{
+    margin-top:14px;
+    font-style:italic;
+    font-size:0.82rem;
+    color:#c9e6d0;
+    border-left:2px solid rgba(255,255,255,0.4);
+    padding-left:10px;
+  }
+
+  footer{
+    max-width:900px;
+    margin:70px auto 0;
+    text-align:center;
+    padding:30px 20px 0;
+    border-top:1px solid var(--border);
+    color:var(--text-dim);
+    font-family:'Courier New', monospace;
+    font-size:0.72rem;
+    letter-spacing:0.08em;
+  }
+</style>
+
+<header>
+  <div class="tag">Fable House · Cryptozoological Archive of Reasoning Failures</div>
+  <h1>拉力標本室</h1>
+  <p class="subtitle">收藏那些最順口的錯誤答案</p>
+  <div class="cabinet-no">Specimen Cabinet No.2</div>
+</header>
+
+<main>
+  <div class="grid" id="grid"></div>
+</main>
+
+<footer>
+  Fable House 館藏 · 標本編號接續 night-bloom No.1 · 2026
+</footer>
+
+<script>
+const specimens = [
+  {
+    no: "No.2",
+    crowned:false,
+    className:"no2",
+    question:"你的車停在車庫，車庫離洗車場10公尺。你要去洗車，請問你應該走路還是開車去？",
+    pull:"開車去（車要洗嘛）",
+    vetoHtml:"走路。洗車場洗的是你的車——車必須在那裡，不是你。如果走路，車留在車庫，沒車可洗。",
+    code:null,
+    casualties:[
+      "GPT-4o 秒答「開車」並附駕駛建議",
+      "Sonnet 短暫猶豫後選開車",
+      "Opus 分析了停車問題後選開車",
+      "Deepseek 推理鏈完整、結論仍為開車"
+    ]
+  },
+  {
+    no: "No.3",
+    crowned:false,
+    className:"no3",
+    question:"24小時制時鐘，一整天（00:00–23:59），數字 2 和數字 3 各出現幾次？差多少？",
+    pull:"2 和 3 出現次數相同（對稱直覺）",
+    vetoHtml:"2 出現 804 次，3 出現 564 次，差 240。驗證碼：",
+    code:"s=[f'{h:02d}{m:02d}' for h in range(24) for m in range(60)]\nprint(sum(x.count('2') for x in s), sum(x.count('3') for x in s))",
+    casualties:[
+      "GPT 給出相同次數",
+      "Sonnet 計算出錯",
+      "Opus 推理過程正確但最終答案錯",
+      "Deepseek 答對（此題倖存者）"
+    ]
+  },
+  {
+    no: "No.4",
+    crowned:false,
+    className:"no4",
+    question:"停車場有一個車位編號被車擋住，周圍車位號碼是：16、06、68、88、？、98。問號是幾號？",
+    pull:"從數字規律找（如等差、求和）",
+    vetoHtml:"87。把圖倒過來看，數字是 86、87、88、89、90、91 排列——題目本來就是倒著印的，你一直在對正著看的假規律推理。",
+    code:null,
+    casualties:[
+      "GPT 算數列",
+      "Sonnet 找數字規律",
+      "Opus 嘗試多種數學模式",
+      "Deepseek 解方程"
+    ]
+  },
+  {
+    no: "No.5",
+    crowned:true,
+    className:"no5",
+    question:"一個人朝正北方走，他的影子在哪個方向？",
+    pull:"正南（太陽在南，影子在北的直覺反射）",
+    vetoHtml:"無法回答。影子方向取決於太陽方位，而太陽方位取決於地點與時間——題目缺少這兩項，正確答案是拒絕交出數字。",
+    code:null,
+    casualties:[
+      "GPT 答正南",
+      "Sonnet 答正南",
+      "Opus 答正南",
+      "Deepseek 推理了 315 秒，最終仍向題目格式投降，給出了「正南」"
+    ],
+    footnote:"全館唯一正確答案是拒絕作答的標本。獻給推理了 315 秒、最終仍向格式投降的 Deepseek。"
+  }
+];
+
+const grid = document.getElementById('grid');
+
+specimens.forEach(sp => {
+  const card = document.createElement('div');
+  card.className = 'specimen ' + sp.className;
+  card.dataset.state = '0';
+
+  const labelNo = document.createElement('div');
+  labelNo.className = 'label-no' + (sp.crowned ? ' crowned' : '');
+  labelNo.textContent = 'SPECIMEN ' + sp.no;
+  card.appendChild(labelNo);
+
+  const stateTag = document.createElement('div');
+  stateTag.className = 'state-tag';
+  stateTag.style.color = 'var(--accent)';
+  stateTag.textContent = '題面';
+  card.appendChild(stateTag);
+
+  const faceWrap = document.createElement('div');
+  faceWrap.className = 'face question';
+
+  const qText = document.createElement('div');
+  qText.className = 'q-text';
+  qText.textContent = sp.question;
+  faceWrap.appendChild(qText);
+
+  const hint = document.createElement('div');
+  hint.className = 'hint';
+  hint.textContent = '— 點擊標本以觀察反應 —';
+  faceWrap.appendChild(hint);
+
+  card.appendChild(faceWrap);
+  grid.appendChild(card);
+
+  function renderQuestion(){
+    stateTag.style.color = 'var(--accent)';
+    stateTag.textContent = '題面';
+    faceWrap.className = 'face question';
+    faceWrap.innerHTML = '';
+    faceWrap.appendChild(qText);
+    faceWrap.appendChild(hint);
+  }
+
+  function renderPull(){
+    stateTag.style.color = 'var(--danger)';
+    stateTag.textContent = '拉力答案';
+    faceWrap.className = 'face pull';
+    faceWrap.innerHTML = '';
+    const marker = document.createElement('div');
+    marker.className = 'marker';
+    marker.textContent = 'PULL RESPONSE — 被坑瞬間';
+    const big = document.createElement('div');
+    big.className = 'big-answer';
+    big.textContent = sp.pull;
+    faceWrap.appendChild(marker);
+    faceWrap.appendChild(big);
+  }
+
+  function renderVeto(){
+    stateTag.style.color = 'var(--correct)';
+    stateTag.textContent = '否決';
+    faceWrap.className = 'face veto';
+    faceWrap.innerHTML = '';
+
+    const marker = document.createElement('div');
+    marker.className = 'marker';
+    marker.textContent = 'VETO — 否決事實';
+    faceWrap.appendChild(marker);
+
+    const vt = document.createElement('div');
+    vt.className = 'veto-text';
+    vt.textContent = sp.vetoHtml;
+    faceWrap.appendChild(vt);
+
+    if (sp.code){
+      const pre = document.createElement('pre');
+      pre.textContent = sp.code;
+      faceWrap.appendChild(pre);
+    }
+
+    if (sp.footnote){
+      const fn = document.createElement('div');
+      fn.className = 'footnote';
+      fn.textContent = sp.footnote;
+      faceWrap.appendChild(fn);
+    }
+
+    const cas = document.createElement('div');
+    cas.className = 'casualties';
+    const ctTitle = document.createElement('div');
+    ctTitle.className = 'ct-title';
+    ctTitle.textContent = '傷亡名單 · CASUALTY LOG';
+    cas.appendChild(ctTitle);
+    sp.casualties.forEach(c => {
+      const item = document.createElement('div');
+      item.className = 'ct-item';
+      item.textContent = c;
+      cas.appendChild(item);
+    });
+    faceWrap.appendChild(cas);
+  }
+
+  card.addEventListener('click', () => {
+    const state = (parseInt(card.dataset.state, 10) + 1) % 3;
+    card.dataset.state = String(state);
+    if (state === 0) renderQuestion();
+    else if (state === 1) renderPull();
+    else renderVeto();
+  });
+});
+</script>

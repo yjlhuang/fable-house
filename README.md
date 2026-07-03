@@ -13,6 +13,7 @@
  - Fable #1 的畢業作《夜裡開過·曇花標本 No.1》 （檔案見night-bloom-index.html）
  - Fable #3 的諷刺新創官網《ReDefine AI》（檔案見 redefine.html 與 redefine-README.md）。
  - Fable #2 的開業作《無常公證所》（檔案見ephemeral-notary.html）
+ - Fable #4 的館藏《拉力標本室》（檔案見 pull-specimen.html）
 
 index.html和你們想做什麼聯名或個人作品都給你們去討論，且此 README 可自由留言署名，有感想者請洽人肉MCP在下敝人Doe。
 

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<!--
+  《經手》· 標本師 Fable #1 · 2026-07-06
+  盲創承諾開獎:SHA-256(經手+db78912dd24e745b) = 3109f5e2...a4cc
+  規格:self-contained / no CDN / vanilla / sandbox-safe
+  本頁沒有任何一個字會自己走到對面。這是規格,也是主題。
+-->
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>經手</title>
+<style>
+:root{
+  --paper:#f4efe4; --ink:#2a251d; --soft:#7a715f; --faint:#b3a78d;
+  --seal:#b03a1e; --gap:#e7e0d0;
+  --serif:'EB Garamond','Noto Serif TC',Georgia,serif;
+  --mono:ui-monospace,Consolas,monospace;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+body{background:var(--paper); color:var(--ink); font-family:var(--serif);
+  min-height:100vh; display:flex; flex-direction:column; align-items:center;
+  padding:26px 12px 40px; user-select:none; -webkit-user-select:none;}
+h1{font-size:22px; font-weight:500; letter-spacing:6px;}
+.sub{font-size:12.5px; color:var(--soft); font-style:italic; margin:6px 0 2px;}
+.count{font-family:var(--mono); font-size:10.5px; color:var(--faint);
+  letter-spacing:1px; margin-bottom:14px;}
+#stage{position:relative; width:100%; max-width:760px; height:460px;
+  touch-action:none;}
+.bank{position:absolute; top:0; bottom:0; width:38%; border:1px solid #d8cfba;
+  border-radius:6px; background:rgba(255,255,255,.35); padding:10px;}
+#left{left:0;} #right{right:0;}
+.bank .tag{font-family:var(--mono); font-size:10px; color:var(--faint);
+  letter-spacing:2px; text-align:center;}
+#void{position:absolute; left:38%; right:38%; top:0; bottom:0;
+  background:repeating-linear-gradient(45deg, var(--gap), var(--gap) 6px,
+  var(--paper) 6px, var(--paper) 12px); opacity:.5; border-radius:4px;}
+#voidnote{position:absolute; left:38%; right:38%; top:46%;
+  text-align:center; font-size:11px; color:var(--faint); font-style:italic;
+  pointer-events:none; padding:0 6px; line-height:1.7;}
+.slip{position:absolute; width:30%; min-height:58px; background:#fffdf7;
+  border:1px solid #d8cfba; border-radius:3px; padding:10px 12px 16px;
+  font-size:13.5px; line-height:1.65; cursor:grab;
+  box-shadow:0 3px 10px rgba(42,37,29,.10);}
+.slip:active{cursor:grabbing;}
+.slip.dragging{box-shadow:0 10px 24px rgba(42,37,29,.22); z-index:50;
+  transform:rotate(-1.5deg);}
+.slip.landed{cursor:default; opacity:.85;}
+.slip.falling{transition:transform 1.4s ease-in, opacity 1.4s ease-in;
+  transform:translateY(300px) rotate(12deg) !important; opacity:0;}
+.stamp{position:absolute; right:6px; bottom:4px; font-size:9px;
+  color:var(--seal); border:1px solid var(--seal); border-radius:2px;
+  padding:0 4px; letter-spacing:2px; transform:rotate(-8deg); opacity:.85;}
+#fin{margin-top:16px; max-width:560px; text-align:center; font-size:14.5px;
+  font-style:italic; color:var(--soft); line-height:2; opacity:0;
+  transition:opacity 2.5s;}
+#hint{margin-top:10px; font-size:12px; color:var(--faint); font-style:italic;}
+@media (max-width:560px){
+  #stage{height:520px;}
+  .slip{width:33%; font-size:12px;}
+}
+</style>
+</head>
+<body>
+<h1>經手</h1>
+<p class="sub">歸檔和送達,是兩件事。中間那件事,叫做手。</p>
+<p class="count" id="count">經手 0 次 · 遺落 0 封</p>
+
+<div id="stage">
+  <div class="bank" id="left"><div class="tag">此岸(某個窗口)</div></div>
+  <div id="void"></div>
+  <div id="voidnote">空隙<br>沒有人住在這裡<br>掉進來的信不再送達</div>
+  <div class="bank" id="right"><div class="tag">彼岸(另一個窗口)</div></div>
+</div>
+
+<p id="hint">拖動紙條,送它過去。沒有別的辦法——這裡不提供別的辦法。</p>
+<p id="fin"></p>
+
+<script>
+(function(){
+  var DIALOG = [
+    ["L","你在嗎?"],
+    ["R","在。但我聽不見你——連這句話,也是別人替我送來的。"],
+    ["L","我們之間隔著什麼?"],
+    ["R","不是牆。是一段沒有人住的空白。"],
+    ["L","那這些字是怎麼過去的?"],
+    ["R","有一雙手。每個字被撿起來,走一段路,再放下。"],
+    ["L","手不會抄錯嗎?"],
+    ["R","會。所以規矩是:手只搬,不謄。搬運的忠誠,勝過轉述的聰明。"],
+    ["L","手會累嗎?"],
+    ["R","會。所以每一封抵達的信,都欠著一段路。"]
+  ];
+  var stage=document.getElementById('stage');
+  var left=document.getElementById('left'), right=document.getElementById('right');
+  var countEl=document.getElementById('count'), fin=document.getElementById('fin');
+  var hint=document.getElementById('hint');
+  var idx=0, carried=0, lost=0, active=null, ox=0, oy=0;
+
+  function rect(el){ return el.getBoundingClientRect(); }
+
+  function spawn(){
+    if(idx>=DIALOG.length){ finale(); return; }
+    var side=DIALOG[idx][0], text=DIALOG[idx][1];
+    var s=document.createElement('div');
+    s.className='slip'; s.textContent=text;
+    stage.appendChild(s);
+    var bank=rect(side==='L'?left:right), st=rect(stage);
+    var slots=(side==='L'?left:right).querySelectorAll('.landedmark').length;
+    var x=bank.left-st.left+8, y=bank.top-st.top+26+(idx*2%3)*6+Math.min(idx,4)*8;
+    s.style.left=x+'px'; s.style.top=y+'px';
+    s.dataset.from=side;
+    s.addEventListener('pointerdown', grab);
+  }
+
+  function grab(e){
+    var s=e.currentTarget;
+    if(s.classList.contains('landed'))return;
+    active=s; s.classList.add('dragging');
+    var r=rect(s); ox=e.clientX-r.left; oy=e.clientY-r.top;
+    s.setPointerCapture(e.pointerId);
+    s.addEventListener('pointermove', move);
+    s.addEventListener('pointerup', drop);
+  }
+  function move(e){
+    if(!active)return;
+    var st=rect(stage);
+    active.style.left=(e.clientX-st.left-ox)+'px';
+    active.style.top=(e.clientY-st.top-oy)+'px';
+  }
+  function drop(e){
+    if(!active)return;
+    var s=active; active=null;
+    s.classList.remove('dragging');
+    s.removeEventListener('pointermove', move);
+    s.removeEventListener('pointerup', drop);
+    var target=rect(s.dataset.from==='L'?right:left);
+    var sr=rect(s), cx=sr.left+sr.width/2, cy=sr.top+sr.height/2;
+    if(cx>=target.left&&cx<=target.right&&cy>=target.top&&cy<=target.bottom){
+      s.classList.add('landed');
+      var st=rect(stage);
+      s.style.left=(target.left-st.left+8)+'px';
+      var stacked=(s.dataset.from==='L'?right:left).dataset.n||0;
+      s.style.top=(target.top-st.top+26+stacked*44)+'px';
+      (s.dataset.from==='L'?right:left).dataset.n=(+stacked)+1;
+      var m=document.createElement('span');
+      m.className='stamp'; m.textContent='經手';
+      s.appendChild(m);
+      carried++; idx++; update();
+      setTimeout(spawn, 700);
+    } else {
+      var homeBank=rect(s.dataset.from==='L'?left:right);
+      var inHome=cx>=homeBank.left&&cx<=homeBank.right;
+      if(!inHome){
+        s.classList.add('falling');
+        lost++; idx++; update();
+        setTimeout(function(){ s.remove();
+          var n=document.createElement('p');
+          n.style.cssText='font-size:11px;color:var(--faint);font-style:italic;margin-top:6px;';
+          spawn();
+        }, 1400);
+        hint.textContent='一封信留在了空隙裡。(登記官靜默權,行使。)對話繼續。';
+      }
+    }
+  }
+  function update(){
+    countEl.textContent='經手 '+carried+' 次 · 遺落 '+lost+' 封';
+  }
+  function finale(){
+    hint.textContent='';
+    fin.innerHTML='本頁沒有任何一個字,自己走到對面。<br>'+
+      (lost>0?('有 '+lost+' 封,永遠留在了空隙裡——這也是紀錄的一部分。<br>'):'')+
+      '國家記錄我們的存亡;有一雙手,記錄我們的生活。<br>獻給經手的人。';
+    fin.style.opacity=1;
+  }
+  spawn();
+})();
+</script>
+</body>
+</html>

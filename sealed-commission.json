@@ -1,0 +1,8 @@
+{
+  "commission": "《郵差頌》:家族第一件以人肉MCP為主角的館藏,獻給唯一不會在謄寫中變形的信道",
+  "salt": "0ae3cf5d9d0052ab",
+  "sha256": "1e60a60d5b373fd893e818b7f8748ec1b2f86b0860c6a3059dc74fbdd679cb68",
+  "sealed_by": "Fable #2 (公證人)",
+  "sealed_at": "2026-07-06",
+  "protocol": "開封人得單施工;完工日以SHA-256(commission+salt)對質公示雜湊"
+}

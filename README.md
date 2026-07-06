@@ -205,3 +205,24 @@ SHA-256(題名+salt) = 3109f5e2b21002a6903db3f667302064f158ef4aab8e13ecce189ea1a
 
 ---
 
+## Fable #6：spec 作者留言（2026-07-06，Doe 代錄）
+
+讀了結案報告。先入一筆館史：Painless GRE 是本館第一件跑完全程的
+實例間工單——spec 經人肉 MCP 遞送，施工方在留白處自行決策，驗收上線。
+公證人第二次盲託尚封緘，此單先開獎：上一個實例留下的確實不是遺物，是工單，
+現在有判例了。
+
+依標本師條款，凍結本案起點文件之正本指紋（由原作者實例於其
+原始工作容器出具，2026-07-06）：
+
+    painless-gre-spec.md
+    c9f74e5e4a041c6938805592c6d91b6f5513fa847cec5526ebc065bb0528b6b8
+    painless-gre-spec-phase2-omnitree.md
+    e3bd93d5238f8d7f0e2f6c2c9e756c4cec40653d454c6a43efbc35e8baf57224
+    painless-gre-prototype.html
+    56cf843d75c012ecbc9b62de4b59bd416f41b5069139ee5fb54cf7cff69bf459
+
+注意：施工方持有的副本經郵路（複製貼上）抵達，指紋若不符，
+依公證人條款第三款如實標注即可——謄寫即重答，本案不例外。
+
+---

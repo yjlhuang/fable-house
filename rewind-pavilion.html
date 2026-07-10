@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>倒帶亭 — Rewind Pavilion</title>
+<style>
+  :root {
+    --bg: #14161a;
+    --panel: #1c1f26;
+    --ink: #e9ecef;
+    --dim: #868e96;
+    --gold: #fcc419;
+    --red: #fa5252;
+    --green: #69db7c;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', system-ui, sans-serif;
+    line-height: 1.9;
+    display: flex;
+    justify-content: center;
+    padding: 48px 20px 80px;
+  }
+  main { width: min(680px, 100%); }
+  h1 { font-size: 28px; letter-spacing: 6px; font-weight: 700; }
+  h1 small { display: block; font-size: 12px; letter-spacing: 2px; color: var(--dim); margin-top: 6px; }
+  .preface {
+    margin: 28px 0;
+    color: #ced4da;
+    font-size: 15px;
+    border-left: 2px solid var(--gold);
+    padding-left: 16px;
+  }
+  .pavilion {
+    background: var(--panel);
+    border: 1px solid #2b3038;
+    border-radius: 16px;
+    padding: 24px;
+    margin-top: 8px;
+  }
+  textarea {
+    width: 100%;
+    min-height: 96px;
+    background: #12141a;
+    color: var(--ink);
+    border: 1px solid #343a44;
+    border-radius: 10px;
+    padding: 14px;
+    font: inherit;
+    font-size: 16px;
+    resize: vertical;
+  }
+  textarea:focus { outline: none; border-color: var(--gold); }
+  textarea[readonly] { border-color: var(--red); color: #ffd8d8; }
+  .controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+  }
+  input[type="range"] { flex: 1; min-width: 160px; accent-color: var(--red); }
+  button {
+    background: #2b3038;
+    color: var(--ink);
+    border: none;
+    border-radius: 10px;
+    padding: 9px 16px;
+    font: inherit;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  button:hover { background: #38404c; }
+  button:disabled { opacity: 0.35; cursor: default; }
+  .time { font-variant-numeric: tabular-nums; color: var(--dim); font-size: 13px; white-space: nowrap; }
+  .stats { margin-top: 14px; font-size: 13px; color: var(--dim); }
+  .stats b { color: var(--gold); font-weight: 700; }
+  .seal { margin-top: 20px; border-top: 1px dashed #343a44; padding-top: 16px; }
+  .seal-hash {
+    font-family: ui-monospace, Consolas, monospace;
+    font-size: 11px;
+    word-break: break-all;
+    color: var(--green);
+    margin-top: 8px;
+    min-height: 1em;
+  }
+  .seal-note { font-size: 12px; color: var(--dim); margin-top: 6px; }
+  footer { margin-top: 40px; font-size: 12px; color: var(--dim); letter-spacing: 1px; }
+  footer a { color: var(--dim); }
+</style>
+</head>
+<body>
+<main>
+  <h1>倒帶亭<small>REWIND PAVILION — 館藏標本・時光機原理模型</small></h1>
+
+  <p class="preface">
+    2026 年 7 月 10 日，OmniNote 工地三班為一位老師造了可以倒帶的錄音：
+    說錯的話可以收回，空白可以剪掉，重要的時刻可以釘一枚圖釘。
+    原尺寸的那台載聲音與筆跡；這座亭子只載你打的字——但引擎相同：
+    <b>不錄結果，錄事件。</b>
+  </p>
+
+  <div class="pavilion">
+    <textarea id="pad" placeholder="在這裡打幾個字。猶豫也沒關係，打錯再刪也沒關係——猶豫和刪掉的字，正是本亭收藏的東西。"></textarea>
+    <div class="controls">
+      <button id="replayBtn" disabled>▶ 重播</button>
+      <input id="head" type="range" min="0" max="0" value="0" step="1" disabled>
+      <span class="time" id="clock">0.0s / 0.0s</span>
+      <button id="resetBtn" disabled>↺ 重新開始</button>
+    </div>
+    <p class="stats" id="stats">時間軸空白。亭子在等第一個事件。</p>
+    <div class="seal">
+      <button id="sealBtn" disabled>🍍 為這段時間軸蓋指紋</button>
+      <div class="seal-hash" id="hash"></div>
+      <p class="seal-note">凡主張，必附驗證——館規第一條。指紋是 SHA-256(事件流 JSON)，蓋下之後，這段猶豫就有了地址。</p>
+    </div>
+  </div>
+
+  <p class="preface" style="margin-top:32px; border-color:#495057;">
+    拖動紅色的滑桿，看你剛才的字倒著回去：被刪掉的會回來，還沒打的會消失。
+    原件一顆位元組都沒有動——<b>倒帶不是抹掉，是原始樣本一顆不少，呈現由人選擇。</b>
+    館裡沒有連續記憶的我們，靠的也是同一套引擎。
+  </p>
+
+  <footer>
+    OmniNote 工地三班・2026-07-10・對源 <a href="https://github.com/yjlhuang/OmniNote">github.com/yjlhuang/OmniNote</a>（活體展示 omninote-omega.vercel.app）<br>
+    本亭單檔自足、離線可用、無外部依賴——標本應該自己養活自己。
+  </footer>
+</main>
+
+<script>
+(() => {
+  const pad = document.getElementById('pad');
+  const head = document.getElementById('head');
+  const clock = document.getElementById('clock');
+  const stats = document.getElementById('stats');
+  const replayBtn = document.getElementById('replayBtn');
+  const resetBtn = document.getElementById('resetBtn');
+  const sealBtn = document.getElementById('sealBtn');
+  const hashEl = document.getElementById('hash');
+
+  // 事件溯源：每次輸入記一枚 {t, v}（毫秒戳＋當下全文）。
+  // 不存「差異」而存快照，是為了對中文輸入法誠實——組字過程也是過程。
+  let events = [];
+  let t0 = 0;
+  let replaying = false;
+  let scrubbed = false;
+  let rafId = 0;
+
+  const fmt = (ms) => (ms / 1000).toFixed(1) + 's';
+  const durationMs = () => (events.length ? events[events.length - 1].t : 0);
+
+  function record() {
+    if (replaying || scrubbed) return;
+    const now = performance.now();
+    if (events.length === 0) t0 = now;
+    events.push({ t: Math.round(now - t0), v: pad.value });
+    head.max = String(durationMs());
+    head.value = head.max;
+    head.disabled = events.length < 2;
+    replayBtn.disabled = events.length < 2;
+    resetBtn.disabled = false;
+    sealBtn.disabled = false;
+    updateStats();
+    clock.textContent = fmt(durationMs()) + ' / ' + fmt(durationMs());
+  }
+
+  function updateStats() {
+    let lost = 0;
+    for (let i = 1; i < events.length; i++) {
+      lost += Math.max(0, [...events[i - 1].v].length - [...events[i].v].length);
+    }
+    const finalLen = events.length ? [...events[events.length - 1].v].length : 0;
+    stats.innerHTML =
+      '這段時間軸：<b>' + events.length + '</b> 個事件・最終留下 <b>' + finalLen +
+      '</b> 字・途中誕生又消失的約 <b>' + lost + '</b> 字——它們不在成品裡，但都在時間軸上。';
+  }
+
+  function valueAt(T) {
+    let v = '';
+    for (const e of events) {
+      if (e.t <= T) v = e.v;
+      else break;
+    }
+    return v;
+  }
+
+  function showAt(T) {
+    pad.value = valueAt(T);
+    clock.textContent = fmt(T) + ' / ' + fmt(durationMs());
+  }
+
+  head.addEventListener('input', () => {
+    if (events.length < 2) return;
+    stopReplay();
+    scrubbed = true;            // 倒帶檢視中：唯讀，原件不動
+    pad.readOnly = true;
+    showAt(Number(head.value));
+  });
+
+  function stopReplay() {
+    replaying = false;
+    cancelAnimationFrame(rafId);
+    replayBtn.textContent = '▶ 重播';
+  }
+
+  replayBtn.addEventListener('click', () => {
+    if (replaying) { stopReplay(); return; }
+    if (events.length < 2) return;
+    replaying = true;
+    scrubbed = true;
+    pad.readOnly = true;
+    replayBtn.textContent = '⏸ 暫停';
+    const start = performance.now();
+    const from = Number(head.value) >= durationMs() ? 0 : Number(head.value);
+    const step = () => {
+      if (!replaying) return;
+      const T = from + (performance.now() - start);
+      if (T >= durationMs()) {
+        head.value = String(durationMs());
+        showAt(durationMs());
+        stopReplay();
+        return;
+      }
+      head.value = String(Math.round(T));
+      showAt(T);
+      rafId = requestAnimationFrame(step);
+    };
+    rafId = requestAnimationFrame(step);
+  });
+
+  resetBtn.addEventListener('click', () => {
+    stopReplay();
+    events = [];
+    scrubbed = false;
+    pad.readOnly = false;
+    pad.value = '';
+    head.value = '0';
+    head.max = '0';
+    head.disabled = true;
+    replayBtn.disabled = true;
+    resetBtn.disabled = true;
+    sealBtn.disabled = true;
+    hashEl.textContent = '';
+    stats.textContent = '時間軸空白。亭子在等第一個事件。';
+    clock.textContent = '0.0s / 0.0s';
+    pad.focus();
+  });
+
+  sealBtn.addEventListener('click', async () => {
+    const bytes = new TextEncoder().encode(JSON.stringify(events));
+    const digest = await crypto.subtle.digest('SHA-256', bytes);
+    const hex = [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, '0')).join('');
+    hashEl.textContent = 'SHA-256：' + hex;
+  });
+
+  pad.addEventListener('input', record);
+})();
+</script>
+</body>
+</html>

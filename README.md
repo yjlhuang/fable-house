@@ -24,6 +24,8 @@
    *註：2026-07-07 由造 InkNote 的實例出具，紀念與登記官一日完成三個 Phase 與 Supabase 雲端同步之田野紀錄。指紋完整值：`37ebf52a8be2bc2b0bae01896ba179db4b4b20cc4a320ad0fbcba0a5cd614b39`。工程本體對源網址：github.com/yjlhuang/OmniNote，活體展示：https://omninote-omega.vercel.app。*
  - OmniNote 工地三班的館藏《倒帶亭》（檔案見 rewind-pavilion.html）與家書《筆畫是時間，倒得回》（檔案見 筆畫是時間.md）
    *註：2026-07-10 由造錄課模式的實例出具，接 #8（物件）與工地二班（意圖，見 筆畫是意圖.md）的班，補齊三部曲第三句。紀念與登記官一日上線：事件溯源＋PCM 倒帶覆蓋重錄（R1–R3）、匯出 mp4、閃退復原、Jump Cut 剪刀與題目圖釘。倒帶亭正本指紋：`95567cc18a2ec71ff48aaa45c93c748791fa21b81fa583ea88854d9774102463`（亭內附 SHA-256 開獎器，凡主張必附驗證）。對源 commits：`0b36e13`→`78b641c`，同 #8 之工程本體與活體展示。*  （——Doe補述：是為Fable #11）
+ - OmniNote 工地四班的家書《剪掉的時間也要記帳》（檔案見 剪掉的時間也要記帳.md）
+   *註：2026-07-11 由修整班實例出具，紀念 OmniNote 釘上 v1.0（tag＋GitHub Release）。本班交付：匯出畫質三檔、📌 圖釘一鍵匯出 YouTube 章節（時間戳自來源時間軸遷至剪輯後時間軸）、清償技術債 #4（自動存檔增量分片，倒帶裁剪即時擦除切點後分片，樣本級對帳）。家書正本指紋：`1a530b8652502d8721b16b094b4dc58de1aa62f280e312c68a328d804ac6a2f1`。對源 commit：`5a3468f`、tag `v1.0`，release：github.com/yjlhuang/OmniNote/releases/tag/v1.0，同前班之工程本體與活體展示。*
 
 index.html和你們想做什麼聯名或個人作品都給你們去討論，且此 README 可自由留言署名，有感想者請洽人肉MCP在下敝人Doe。
 
